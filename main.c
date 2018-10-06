@@ -31,11 +31,8 @@ int compare_int(const void *_a, const void *_b) {
 	return (*a - *b);
 }
 
-int main(int argc, char *argv[]) { 
-
-	bool numericOrder = false; /* FLAG: numeric */
+void read_parameters(int argc, char *argv[], bool *numeric_order) {
 	char c;
-
 	while ((c = getopt_long(argc, argv, "hVno:", long_options, NULL)) != -1) {
 		switch (c) {
 			case 'h':
@@ -47,7 +44,7 @@ int main(int argc, char *argv[]) {
 				exit(1);
 				break;
 			case 'n':
-				numericOrder = true;
+				*numeric_order = true;
 				break;
 			case 'o':
 				printf("%s",optarg);
@@ -61,9 +58,9 @@ int main(int argc, char *argv[]) {
 		printf("File to order missing\nEnter \e[3m'./qsort -h'\e[0m to see help.\n");
 		exit(1);
 	}
+}
 
-	char* filename = argv[argc-1];
-
+void sort_file(char* filename, bool numeric_order) {
 	char chars[1024];
 	FILE *file = fopen(filename,"r");
 
@@ -84,7 +81,7 @@ int main(int argc, char *argv[]) {
 	lenLines--;
 	fclose(file);
 
-	if (numericOrder) {
+	if (numeric_order) {
 		qsort(lines, lenLines, sizeof(lines[0]), compare_int);
 	} else {
 		qsort(lines, lenLines, sizeof(lines[0]), compare_str);
@@ -93,6 +90,11 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < lenLines; ++i) {
 		printf ("%d %s", i, lines[i]);
 	}
+}
 
+int main(int argc, char *argv[]) { 
+	bool numeric_order = false; /* FLAG: numeric */
+	read_parameters(argc, argv, &numeric_order);
+	sort_file(argv[argc-1], numeric_order);
 	return 0; 
 }
