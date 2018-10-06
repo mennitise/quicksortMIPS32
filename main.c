@@ -17,10 +17,17 @@ static struct option long_options[] = {
 	{NULL, 0, NULL, 0}
 };
 
-int compare(const void *_a, const void *_b) {
+int compare_str(const void *_a, const void *_b) {
 	char *a, *b;
 	a = (char *) _a;
 	b = (char *) _b;
+	return (*a - *b);
+}
+
+int compare_int(const void *_a, const void *_b) {
+	int *a, *b;
+	a = (int *) _a;
+	b = (int *) _b;
 	return (*a - *b);
 }
 
@@ -71,18 +78,17 @@ int main(int argc, char *argv[]) {
 		while (feof(file) == 0) {
 			fgets(chars,1024,file);
 			strcpy(lines[lenLines], chars);
-			//printf("%s",chars);
-			//printf("%s",lines[lenLines]);
 			lenLines++;
 		}
 	}
 	lenLines--;
 	fclose(file);
 
-/*
-	printf("%s\n", lines[0]);
-*/
-	qsort(lines, lenLines, sizeof(lines[0]), compare);
+	if (numericOrder) {
+		qsort(lines, lenLines, sizeof(lines[0]), compare_int);
+	} else {
+		qsort(lines, lenLines, sizeof(lines[0]), compare_str);
+	}
 
 	for (int i = 0; i < lenLines; ++i) {
 		printf ("%d %s", i, lines[i]);
