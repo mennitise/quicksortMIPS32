@@ -1,10 +1,9 @@
-all : main
+CC = gcc
+CFLAGS = -Wall
+PROG = qsort
 
-main : main.o
-	gcc main.o -o qsort
-
-main.o : main.c
-	gcc -c main.c
+all:
+	$(CC) $(CFLAGS) main.c -o $(PROG)
 
 clean :
-	rm qsort *.o
+	rm $(PROG) *.o *.s

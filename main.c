@@ -8,6 +8,7 @@
 
 const char* VERSION = "1.0.0\n";
 const char* HELP_MESSAGE = "Usage:\n	qsort -h\n	qsort -V\n	qsort [options] archivo\nOptions:\n	-h, --help Imprime ayuda.\n	-V, --version Versión del programa.\n	-o, --output\nArchivo de salida.\n	-n, --numeric Ordenar los datos numéricamente en vez de alfabéticamente.\nExamples:\n	qsort -n numeros.txt\n";
+const int MAX_LENGHT = 2048;
 
 static struct option long_options[] = {
 	{"help", 0, NULL, 'h'},
@@ -16,6 +17,50 @@ static struct option long_options[] = {
 	{"numeric", 0, NULL, 'n'},
 	{NULL, 0, NULL, 0}
 };
+
+/*----------------------------------QUICKSORT IMPLEMENTATION------------------------------------*/
+
+void qs(char list[MAX_LENGHT][MAX_LENGHT], int limit_left, int limit_right, int (*compare)(const void *, const void*)) {
+	int left, right;
+	char temp[MAX_LENGHT];
+	char pivot[MAX_LENGHT];
+
+	left = limit_left;
+	right = limit_right;
+	strcpy(pivot, list[(left+right)/2]);
+
+	while (left <= right) {
+		
+		while ((compare(list[left], pivot) < 0) && (left < limit_right)){
+			left++;
+		}
+
+		while ((compare(pivot, list[right]) < 0) && (right > limit_left)){
+			right--;
+		}
+
+		if (left <= right) {
+			strcpy(temp, list[left]);
+			strcpy(list[left], list[right]);
+			strcpy(list[right], temp);
+			left++;
+			right--;
+		}
+	}
+
+	if (limit_left < right){
+		qs(list, limit_left, right, compare);
+	}
+	if (limit_right > left){
+		qs(list, left, limit_right, compare);
+	}
+}
+
+void quicksort(char list[MAX_LENGHT][MAX_LENGHT], int len, int (*compare)(const void *, const void*)) {
+	qs(list, 0, len-1, compare);
+}
+
+/*----------------------------------------------------------------------------------------------*/
 
 int compare_str(const void *_a, const void *_b) {
 	char *a, *b;
@@ -60,12 +105,17 @@ void read_parameters(int argc, char *argv[], bool *numeric_order) {
 	}
 }
 
+void print_list(char list[MAX_LENGHT][MAX_LENGHT], size_t len){
+	for (int i = 0; i < len; ++i) {
+		printf ("%d %s", i, list[i]);
+	}
+}
+
 void sort_file(char* filename, bool numeric_order) {
 	char chars[1024];
 	FILE *file = fopen(filename,"r");
 
-	char lines[2048][2048];
-	char* copyLines[2048];
+	char lines[MAX_LENGHT][MAX_LENGHT];
 	int lenLines = 0;
 
 	if (file == NULL){
@@ -82,14 +132,11 @@ void sort_file(char* filename, bool numeric_order) {
 	fclose(file);
 
 	if (numeric_order) {
-		qsort(lines, lenLines, sizeof(lines[0]), compare_int);
+		quicksort(lines, lenLines, compare_int);
 	} else {
-		qsort(lines, lenLines, sizeof(lines[0]), compare_str);
+		quicksort(lines, lenLines, compare_str);
 	}
-
-	for (int i = 0; i < lenLines; ++i) {
-		printf ("%d %s", i, lines[i]);
-	}
+	print_list(lines, lenLines);
 }
 
 int main(int argc, char *argv[]) { 
