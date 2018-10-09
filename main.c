@@ -92,7 +92,9 @@ void read_parameters(int argc, char *argv[], bool *numeric_order) {
 				*numeric_order = true;
 				break;
 			case 'o':
-				printf("%s",optarg);
+				if (strcmp(optarg, "-") != 0) {
+					freopen(optarg, "a+", stdout);
+				}
 				break;
 			default:
 				abort();
@@ -107,7 +109,7 @@ void read_parameters(int argc, char *argv[], bool *numeric_order) {
 
 void print_list(char list[MAX_LENGHT][MAX_LENGHT], size_t len){
 	for (int i = 0; i < len; ++i) {
-		printf ("%d %s", i, list[i]);
+		printf ("%s", list[i]);
 	}
 }
 
