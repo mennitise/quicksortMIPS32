@@ -16,50 +16,51 @@ int compare_int_lx(const void *_a, const void *_b) {
 	return (*a - *b);
 }
 
-void qs(char** list, int limit_left, int limit_right, int numeric_order) {
-	int left, right;
-	char temp[LENGHT];
-	char pivot[LENGHT];
+void qsortMIPS(char** limit_left, char** limit_right, int numeric_order) {
+	char** left = limit_left;
+	char** right = limit_right;
 
-	left = limit_left;
-	right = limit_right;
-	strcpy(pivot, list[(left+right)/2]);
+	char temp[LENGHT];
+	char** pivot = right;
+
+	//strcpy(pivot, (left+right)/2]);
 
 	while (left <= right) {
 		
 		if (numeric_order == 0){
-			while ((compare_str_lx(list[left], pivot) < 0) && (left < limit_right)){
+			while ((compare_str_lx(*left, *pivot) < 0) && (left < limit_right)){
 				left++;
 			}
 		} else {
-			while ((compare_int_lx(list[left], pivot) < 0) && (left < limit_right)){
+			while ((compare_int_lx(*left, *pivot) < 0) && (left < limit_right)){
 				left++;
 			}
 		}
 
 		if (numeric_order == 0){
-			while ((compare_str_lx(pivot, list[right]) < 0) && (right > limit_left)){
+			while ((compare_str_lx(*pivot, *right) < 0) && (right > limit_left)){
 				right--;
 			}
 		} else {
-			while ((compare_int_lx(pivot, list[right]) < 0) && (right > limit_left)){
+			while ((compare_int_lx(*pivot, *right) < 0) && (right > limit_left)){
 				right--;
 			}
 		}
 
 		if (left <= right) {
-			strcpy(temp, list[left]);
-			strcpy(list[left], list[right]);
-			strcpy(list[right], temp);
+			strcpy(temp, *left);
+			strcpy(*left, *right);
+			strcpy(*right, temp);
 			left++;
 			right--;
 		}
 	}
 
 	if (limit_left < right){
-		qs(list, limit_left, right, numeric_order);
+		qsortMIPS(limit_left, right, numeric_order);
 	}
 	if (limit_right > left){
-		qs(list, left, limit_right, numeric_order);
+		qsortMIPS(left, limit_right, numeric_order);
 	}
 }
+

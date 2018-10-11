@@ -42,8 +42,7 @@ extern void qsortMIPS(char** left, char** right, int numeric_order);
 extern void qs(char** list, int limit_left, int limit_right, int numeric_order);
 
 void quicksort(char** list, int len, int numeric_order) {
-	//qsortMIPS(&list[0], &list[len-1], numeric_order);
-	qs(list, 0, len-1, numeric_order);
+	qsortMIPS(&list[0], &list[len-1], numeric_order);
 }
 
 /*----------------------------------------------------------------------------------------------*/
