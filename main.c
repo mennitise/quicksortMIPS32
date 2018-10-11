@@ -35,61 +35,15 @@ int compare_int(const void *_a, const void *_b) {
 
 /*----------------------------------QUICKSORT IMPLEMENTATION------------------------------------*/
 
+// MIPS IMPLEMENTATION
 extern void qsortMIPS(char** left, char** right, int numeric_order);
 
-void qs(char** list, int limit_left, int limit_right, int numeric_order) {
-	int left, right;
-	char temp[MAX_LENGHT];
-	char pivot[MAX_LENGHT];
-
-	left = limit_left;
-	right = limit_right;
-	strcpy(pivot, list[(left+right)/2]);
-
-	while (left <= right) {
-		
-		if (numeric_order == 0){
-			while ((compare_str(list[left], pivot) < 0) && (left < limit_right)){
-				left++;
-			}
-		} else {
-			while ((compare_int(list[left], pivot) < 0) && (left < limit_right)){
-				left++;
-			}
-		}
-
-		if (numeric_order == 0){
-			while ((compare_str(pivot, list[right]) < 0) && (right > limit_left)){
-				right--;
-			}
-		} else {
-			while ((compare_int(pivot, list[right]) < 0) && (right > limit_left)){
-				right--;
-			}
-		}
-
-		if (left <= right) {
-			strcpy(temp, list[left]);
-			strcpy(list[left], list[right]);
-			strcpy(list[right], temp);
-			left++;
-			right--;
-		}
-	}
-
-	if (limit_left < right){
-		qs(list, limit_left, right, numeric_order);
-	}
-	if (limit_right > left){
-		qs(list, left, limit_right, numeric_order);
-	}
-}
+// C IMPLEMENTATION
+extern void qs(char** list, int limit_left, int limit_right, int numeric_order);
 
 void quicksort(char** list, int len, int numeric_order) {
-	// qs(list, 0, len-1, numeric_order);
-	// qsort(&list[0], &list[len-1], numeric_order);
-	
-	qsortMIPS(&list[0], &list[len-1], numeric_order);
+	//qsortMIPS(&list[0], &list[len-1], numeric_order);
+	qs(list, 0, len-1, numeric_order);
 }
 
 /*----------------------------------------------------------------------------------------------*/
@@ -175,30 +129,6 @@ void debug(char* s){
 }
 
 int main(int argc, char *argv[]) { 
-/*
-	// ----- TESTING ASSEMBLY ---------
-	char** tests;
-	tests = malloc(10 * sizeof(char*));
-	tests[0] = malloc(10 * sizeof(char));
-	strcpy(tests[0], "zero\n");
-	tests[1] = malloc(10 * sizeof(char));
-	strcpy(tests[1], "one\n");
-	tests[2] = malloc(10 * sizeof(char));
-	strcpy(tests[2], "two\n");
-	tests[3] = malloc(10 * sizeof(char));
-	strcpy(tests[3], "three\n");
-	tests[4] = malloc(10 * sizeof(char));
-	strcpy(tests[4], "four\n");
-	tests[5] = malloc(10 * sizeof(char));
-	strcpy(tests[5], "five\n");
-
-	print_list(tests, 6);
-	printf("-------------\n");
-	qsortMIPS(&tests[0], &tests[5], 0);
-	print_list(tests, 6);
-	// ---------------------------------
-*/
-
 	bool numeric_order = 0; /* FLAG: numeric */
 	read_parameters(argc, argv, &numeric_order);
 	sort_file(argv[argc-1], numeric_order);
