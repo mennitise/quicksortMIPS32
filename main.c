@@ -159,6 +159,10 @@ void sort_file(char* filename, bool numeric_order) {
 	free_list(lines, lenLines+1);
 }
 
+void debug(char* s){
+	printf("%s\n", s);
+}
+
 int main(int argc, char *argv[]) { 
 /*
 	// ----- TESTING ASSEMBLY ---------

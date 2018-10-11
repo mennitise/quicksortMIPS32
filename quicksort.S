@@ -104,15 +104,14 @@ qsortMIPS:
 
 ######
 
+	lw 		t3, O_PIVOT(sp)
+	lw		t3, 0(t3)
+	lbu 	t8, 0(t3) # t8 = *pivot
 
 while_loop:
 	lw 		t6, O_LEFT(sp)
 	lw		t7, O_RIGHT(sp)
 	bgtu 	t6, t7, end_while_loop # left > right
-
-	lw 		t3, O_PIVOT(sp)
-	lw		t3, 0(t3)
-	lbu 	t8, 0(t3) # t8 = *pivot
 
 while_left_loop:
 	lw 		t6, O_LEFT(sp)
@@ -155,7 +154,6 @@ end_while_left_right_loop:
 
 	sb 		t5, 0(t6)
 	sb 		t4, 0(t7)
-
 
 	lw 		t6, O_LEFT(sp)
 	addu 	t6, t6, 4 # left++
