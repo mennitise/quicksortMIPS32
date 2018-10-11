@@ -1,7 +1,7 @@
 #!/bin/bash
 printf "Compilo\n"
 
-make
+make linux
 
 echo "Test 1 './qsort test_files/numeros.txt'"
 echo "-----------------------------------------"
