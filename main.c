@@ -21,7 +21,7 @@ static struct option long_options[] = {
 
 /*----------------------------------QUICKSORT IMPLEMENTATION------------------------------------*/
 
-extern void qsortMIPS(char** izq, char** der, int num);
+extern void qsortMIPS(char** left, char** right, int numeric);
 
 void qs(char** list, int limit_left, int limit_right, int (*compare)(const void *, const void*)) {
 	int left, right;
@@ -181,7 +181,6 @@ int main(int argc, char *argv[]) {
 	qsortMIPS(&tests[0], &tests[5], 0);
 	print_list(tests, 6);
 	// ---------------------------------
-
 
 	bool numeric_order = false; /* FLAG: numeric */
 	read_parameters(argc, argv, &numeric_order);
