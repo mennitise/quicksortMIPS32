@@ -60,7 +60,8 @@ void qs(char** list, int limit_left, int limit_right, int (*compare)(const void 
 }
 
 void quicksort(char** list, int len, int (*compare)(const void *, const void*)) {
-	qs(list, 0, len-1, compare);
+	// qs(list, 0, len-1, compare);
+	qsortMIPS(&list[0], &list[len-1], 0);
 }
 
 /*----------------------------------------------------------------------------------------------*/
@@ -159,7 +160,7 @@ void sort_file(char* filename, bool numeric_order) {
 }
 
 int main(int argc, char *argv[]) { 
-
+/*
 	// ----- TESTING ASSEMBLY ---------
 	char** tests;
 	tests = malloc(10 * sizeof(char*));
@@ -181,6 +182,7 @@ int main(int argc, char *argv[]) {
 	qsortMIPS(&tests[0], &tests[5], 0);
 	print_list(tests, 6);
 	// ---------------------------------
+*/
 
 	bool numeric_order = false; /* FLAG: numeric */
 	read_parameters(argc, argv, &numeric_order);
