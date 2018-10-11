@@ -100,8 +100,6 @@ while_left_loop:
 
 	bgeu 	t6, t2, while_right_loop # branch (left >= limit_right), while_right_loop
 
-#--------------------------------
-
 	lw 		a0, 0(t6)
 	lw 		a1, DIR_PIVOT(sp)
 
@@ -121,8 +119,6 @@ compare_call_1:
 
 	bgez 	v0, while_right_loop
 
-#--------------------------------
-
 	lw 		t6, O_LEFT(sp)
 	addu 	t6, t6, 4 # left++
 	sw 		t6, O_LEFT(sp)
@@ -133,8 +129,6 @@ while_right_loop:
 	lw 		t7, O_RIGHT(sp)
 
 	bleu 	t7, t1, end_while_left_right_loop # branch (right <= limit_left), end_while_left_right_loop
-	
-#--------------------------------
 
 	lw 		a0, DIR_PIVOT(sp)
 	lw 		a1, 0(t7)
@@ -154,8 +148,6 @@ compare_call_2:
 	jal 	t9
 
 	bgez 	v0, end_while_left_right_loop
-
-#--------------------------------
 
 	lw 		t7, O_RIGHT(sp)
 	subu 	t7, t7, 4 # right--

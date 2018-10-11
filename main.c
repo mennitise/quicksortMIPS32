@@ -19,6 +19,20 @@ static struct option long_options[] = {
 	{NULL, 0, NULL, 0}
 };
 
+int compare_str(const void *_a, const void *_b) {
+	char *a, *b;
+	a = (char *) _a;
+	b = (char *) _b;
+	return strcmp(a, b);
+}
+
+int compare_int(const void *_a, const void *_b) {
+	int *a, *b;
+	a = (int *) _a;
+	b = (int *) _b;
+	return (*a - *b);
+}
+
 /*----------------------------------QUICKSORT IMPLEMENTATION------------------------------------*/
 
 extern void qsortMIPS(char** left, char** right, int numeric_order);
@@ -34,12 +48,24 @@ void qs(char** list, int limit_left, int limit_right, int numeric_order) {
 
 	while (left <= right) {
 		
-		while ((compare(list[left], pivot) < 0) && (left < limit_right)){
-			left++;
+		if (numeric_order == 0){
+			while ((compare_str(list[left], pivot) < 0) && (left < limit_right)){
+				left++;
+			}
+		} else {
+			while ((compare_int(list[left], pivot) < 0) && (left < limit_right)){
+				left++;
+			}
 		}
 
-		while ((compare(pivot, list[right]) < 0) && (right > limit_left)){
-			right--;
+		if (numeric_order == 0){
+			while ((compare_str(pivot, list[right]) < 0) && (right > limit_left)){
+				right--;
+			}
+		} else {
+			while ((compare_int(pivot, list[right]) < 0) && (right > limit_left)){
+				right--;
+			}
 		}
 
 		if (left <= right) {
@@ -52,41 +78,22 @@ void qs(char** list, int limit_left, int limit_right, int numeric_order) {
 	}
 
 	if (limit_left < right){
-		if (numeric_order == 0){
-			qs(list, limit_left, right, compare_str);
-		} else {
-			qs(list, limit_left, right, compare_int);
-		}
+		qs(list, limit_left, right, numeric_order);
 	}
 	if (limit_right > left){
-		if (numeric_order == 0){
-			qs(list, left, limit_right, compare_str);
-		} else {
-			qs(list, left, limit_right, compare_int);
-		}
+		qs(list, left, limit_right, numeric_order);
 	}
 }
 
 void quicksort(char** list, int len, int numeric_order) {
 	// qs(list, 0, len-1, numeric_order);
+	// qsort(&list[0], &list[len-1], numeric_order);
+	
 	qsortMIPS(&list[0], &list[len-1], numeric_order);
 }
 
 /*----------------------------------------------------------------------------------------------*/
 
-int compare_str(const void *_a, const void *_b) {
-	char *a, *b;
-	a = (char *) _a;
-	b = (char *) _b;
-	return strcmp(a, b);
-}
-
-int compare_int(const void *_a, const void *_b) {
-	int *a, *b;
-	a = (int *) _a;
-	b = (int *) _b;
-	return (*a - *b);
-}
 
 void read_parameters(int argc, char *argv[], bool *numeric_order) {
 	char c;
