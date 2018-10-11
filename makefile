@@ -3,7 +3,7 @@ CFLAGS = -Wall -g
 PROG = qsort
 MIPSFLAGS = quicksort.S
 
-.mips:
+mips:
 	$(CC) $(CFLAGS) $(MIPSFLAGS) main.c -o $(PROG)
 
 all:
