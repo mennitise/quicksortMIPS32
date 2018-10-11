@@ -21,9 +21,9 @@ static struct option long_options[] = {
 
 /*----------------------------------QUICKSORT IMPLEMENTATION------------------------------------*/
 
-extern void qsortMIPS(char** left, char** right, int numeric);
+extern void qsortMIPS(char** left, char** right, int numeric_order);
 
-void qs(char** list, int limit_left, int limit_right, int (*compare)(const void *, const void*)) {
+void qs(char** list, int limit_left, int limit_right, int numeric_order) {
 	int left, right;
 	char temp[MAX_LENGHT];
 	char pivot[MAX_LENGHT];
@@ -52,16 +52,24 @@ void qs(char** list, int limit_left, int limit_right, int (*compare)(const void 
 	}
 
 	if (limit_left < right){
-		qs(list, limit_left, right, compare);
+		if (numeric_order == 0){
+			qs(list, limit_left, right, compare_str);
+		} else {
+			qs(list, limit_left, right, compare_int);
+		}
 	}
 	if (limit_right > left){
-		qs(list, left, limit_right, compare);
+		if (numeric_order == 0){
+			qs(list, left, limit_right, compare_str);
+		} else {
+			qs(list, left, limit_right, compare_int);
+		}
 	}
 }
 
-void quicksort(char** list, int len, int (*compare)(const void *, const void*)) {
-	// qs(list, 0, len-1, compare);
-	qsortMIPS(&list[0], &list[len-1], 0);
+void quicksort(char** list, int len, int numeric_order) {
+	// qs(list, 0, len-1, numeric_order);
+	qsortMIPS(&list[0], &list[len-1], numeric_order);
 }
 
 /*----------------------------------------------------------------------------------------------*/
@@ -70,7 +78,7 @@ int compare_str(const void *_a, const void *_b) {
 	char *a, *b;
 	a = (char *) _a;
 	b = (char *) _b;
-	return (*a - *b);
+	return strcmp(a, b);
 }
 
 int compare_int(const void *_a, const void *_b) {
@@ -93,7 +101,7 @@ void read_parameters(int argc, char *argv[], bool *numeric_order) {
 				exit(1);
 				break;
 			case 'n':
-				*numeric_order = true;
+				*numeric_order = 1;
 				break;
 			case 'o':
 				if (strcmp(optarg, "-") != 0) {
@@ -149,11 +157,7 @@ void sort_file(char* filename, bool numeric_order) {
 	lenLines--;
 	fclose(file);
 
-	if (numeric_order) {
-		quicksort(lines, lenLines, compare_int);
-	} else {
-		quicksort(lines, lenLines, compare_str);
-	}
+	quicksort(lines, lenLines, numeric_order);
 	print_list(lines, lenLines);
 
 	free_list(lines, lenLines+1);
@@ -188,7 +192,7 @@ int main(int argc, char *argv[]) {
 	// ---------------------------------
 */
 
-	bool numeric_order = false; /* FLAG: numeric */
+	bool numeric_order = 0; /* FLAG: numeric */
 	read_parameters(argc, argv, &numeric_order);
 	sort_file(argv[argc-1], numeric_order);
 	return 0;
